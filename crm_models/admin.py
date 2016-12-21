@@ -5,3 +5,4 @@ from models import *
 
 
 admin.site.register(Orders)
+admin.site.register(Client)
