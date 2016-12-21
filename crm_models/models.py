@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User as BaseUser
 
+
 # Create your models here.
 
 
@@ -26,7 +27,7 @@ class Orders(models.Model):
     tags = models.ManyToManyField('Tag', verbose_name='Теги')
     client = models.OneToOneField('Client', verbose_name='Клиент')
     manager = models.ManyToManyField(BaseUser, verbose_name='Менеджер')
-    done = models.BooleanField(default=False, verbose_name='Закрыть заказ')
+    done = models.BooleanField(default=False, verbose_name='Заказ закрыт?')
 
     def __unicode__(self):
         return self.title
@@ -59,3 +60,18 @@ class Tag(models.Model):
     def __unicode__(self):
         return self.name
 
+
+class OrderComment(models.Model):
+    class Meta:
+        db_table = 'order_comment'
+        verbose_name = 'Коммент'
+        verbose_name_plural = 'Комментарии'
+
+    order_id = models.ForeignKey('Orders')
+    user_id = models.ForeignKey(BaseUser)
+    comment = models.TextField(verbose_name='Комментарий')
+    created_at = models.DateTimeField(auto_now=True, verbose_name='Дата создания')
+    updated_at = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name='Дата обновления')
+
+    def __unicode__(self):
+        return self.comment[0:20]
