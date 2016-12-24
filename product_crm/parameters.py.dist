@@ -1,0 +1,8 @@
+DB_NAME = 'crm_sys'
+DB_USER = 'root'
+DB_PASS = ''
+ROOT_FOLDER = 'product_crm'
+
+EMAIL_USER = ''
+EMAIL_PASSWORD = ''
+EMAIL_TO = ''

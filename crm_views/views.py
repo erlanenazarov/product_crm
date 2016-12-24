@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from crm_models.models import *
+from forms import *
 
 
 # Create your views here.
@@ -19,3 +20,14 @@ def order_list(request):
     }
 
     return render(request, 'view/orders.html', params)
+
+
+def new_order(request):
+    form = CreateOrderForm
+    if request.method is 'POST':
+        return redirect('index')
+    elif request.method is 'GET':
+        params = {
+            'order_form': CreateOrderForm
+        }
+        return render(request, 'view/forms/add_new_order.html', params)
