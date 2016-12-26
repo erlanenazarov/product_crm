@@ -69,7 +69,7 @@ class OrderComment(models.Model):
 
     order_id = models.ForeignKey('Orders')
     user_id = models.ForeignKey(BaseUser)
-    comment = models.TextField(verbose_name='Комментарий')
+    comment = models.CharField(max_length=1000, verbose_name='Комментарий')
     created_at = models.DateTimeField(auto_now=True, verbose_name='Дата создания')
     updated_at = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name='Дата обновления')
 

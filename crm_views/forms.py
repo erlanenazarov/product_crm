@@ -12,3 +12,9 @@ class CreateOrderForm(forms.ModelForm):
     class Meta:
         model = Orders
         exclude = ()
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = OrderComment
+        exclude = ()

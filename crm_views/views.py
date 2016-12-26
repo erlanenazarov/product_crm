@@ -101,10 +101,42 @@ def remove_order(request, order_id):
 @login_required
 def view_order(request, order_id):
     order = Orders.objects.get(id=order_id)
+    comments = OrderComment.objects.filter(order_id=order)
+    comments_form = CommentForm
     params = {
-        'order': order
+        'order': order,
+        'comments': comments,
+        'comments_form': comments_form
     }
     return render(request, 'view/showcase/order.html', params)
+
+
+@csrf_exempt
+def list_comments(request):
+    if request.POST.get('order_id'):
+        comments = OrderComment.objects.filter(order_id_id=request.POST.get('order_id'))
+    else:
+        comments = OrderComment.objects.all()
+
+    params = {
+        'comments': comments
+    }
+    return render_to_response('view/misc/comments.html', params)
+
+
+@csrf_exempt
+def add_comment(request):
+    if request.POST:
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            try:
+                comment = comment_form.instance
+                comment.save()
+                return JsonResponse(dict(success=True))
+            except:
+                return JsonResponse(dict(success=False))
+
+    return JsonResponse(dict(success=False))
 
 
 @login_required
