@@ -45,10 +45,10 @@
                                            value="{{ item.title }}"
                                            style="background: transparent; border: 0; width: 100%; height: 100%; padding-left: 5px; box-sizing: border-box;"/>
                                 </td>
-                                <td><input type="number"
+                                <td><input type="text"
                                            name="final_price"
                                            placeholder="100"
-                                           value="{{ item.final_price }}"
+                                           value="${{ item.final_price }}"
                                            style="background: transparent; border: 0; width: 100%; height: 100%; padding-left: 5px; box-sizing: border-box;"/>
                                 </td>
                                 <td><input type="text"
@@ -64,10 +64,10 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <a href="" class="btn btn-default" title="Заглянуть внутрь"><i class="fa fa-eye"></i></a>
+                                        <a href="{% url 'order_view' order_id=item.id %}" class="btn btn-default" title="Заглянуть внутрь"><i class="fa fa-eye"></i></a>
                                         <a href="" class="btn btn-default" title="Сохранить"><i class="fa fa-save"></i></a>
                                         <a href="" class="btn btn-default" title="Редактировать"><i class="fa fa-edit"></i></a>
-                                        <a href="" class="btn btn-danger" title="Удалить"><i class="fa fa-remove"></i></a>
+                                        <a href="{% url 'order_remove' order_id=item.id %}" class="btn btn-danger" title="Удалить"><i class="fa fa-remove"></i></a>
                                     </div>
                                 </td>
                             </tr>

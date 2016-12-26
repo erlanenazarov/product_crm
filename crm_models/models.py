@@ -25,7 +25,7 @@ class Orders(models.Model):
     updated_at = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name='Обновлено')
     extra_field = models.TextField(verbose_name='Дополнительно', null=True, blank=True)
     tags = models.ManyToManyField('Tag', verbose_name='Теги', null=True, blank=True)
-    client = models.OneToOneField('Client', verbose_name='Клиент')
+    client = models.ForeignKey('Client', verbose_name='Клиент')
     manager = models.ManyToManyField(BaseUser, verbose_name='Менеджер')
     done = models.BooleanField(default=False, verbose_name='Заказ закрыт?')
 

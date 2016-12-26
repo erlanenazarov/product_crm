@@ -32,6 +32,8 @@ urlpatterns = [
     url(r'^$', dashboard, name='index'),
     url(r'^orders/list$', order_list, name='order_list'),
     url(r'^orders/new$', new_order, name='order_new'),
+    url(r'^orders/remove/(?P<order_id>[0-9]+)$', remove_order, name='order_remove'),
+    url(r'^orders/view/(?P<order_id>[0-9]+)$', view_order, name='order_view')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

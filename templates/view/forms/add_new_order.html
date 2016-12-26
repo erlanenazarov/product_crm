@@ -27,6 +27,7 @@
         </div>
         <!-- /.box-header -->
         {% if message %}<div class="alert alert-danger">{{ message }}</div>{% endif %}
+        {% if request.method == 'POST' %}{% if order_form.errors %}<div class="alert alert-danger">{{ order_form.errors }}</div>{% endif %}{% endif %}
         <!-- form start -->
         <form class="form-horizontal" method="POST" action="{% url 'order_new' %}">
             {% csrf_token %}

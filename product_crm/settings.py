@@ -172,3 +172,5 @@ JET_THEMES = [
         'title': 'Light Gray'
     }
 ]
+
+LOGIN_URL = '/login'

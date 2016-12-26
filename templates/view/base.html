@@ -217,11 +217,13 @@
         {% endblock %}
 
         <!-- Main content -->
-        <section class="content">
-           {% block content %}
+        {% block body %}
+            <section class="content">
+                {% block content %}
 
-           {% endblock %}
-        </section>
+                {% endblock %}
+            </section>
+        {% endblock %}
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
