@@ -1,0 +1,34 @@
+<td class="order-title">
+    <input
+            type="text"
+            name="title"
+            placeholder="title"
+            value="{{ item.title }}"
+            style="background: transparent; border: 0; width: 100%; height: 100%; padding-left: 5px; box-sizing: border-box;"
+    />
+</td>
+<td class="order-price">
+    ${{ item.final_price }}
+</td>
+<td class="order-status">
+    <input
+            type="text"
+            name="status"
+            placeholder="status"
+            value="{{ item.status }}"
+            style="background: transparent; border: 0; width: 100%; height: 100%; padding-left: 5px; box-sizing: border-box;"
+    />
+</td>
+<td class="order-tags">
+    {% for tags in item.tags.all %}
+        <div class="label {{ tags.color }}">{{ tags.name }}</div>
+    {% endfor %}
+</td>
+<td>
+    <div class="btn-group">
+        <a href="{% url 'order_view' order_id=item.id %}" class="btn btn-default" title="Заглянуть внутрь"><i class="fa fa-eye"></i></a>
+        <a href="{% url 'order_edit_dashboard' order_id=item.id %}" class="btn btn-default save-order-dashboard" title="Сохранить"><i class="fa fa-save"></i></a>
+        <a href="{% url 'order_edit' order_id=item.id %}" class="btn btn-default" title="Редактировать"><i class="fa fa-edit"></i></a>
+        <a href="{% url 'order_remove' order_id=item.id %}" class="btn btn-danger" title="Удалить"><i class="fa fa-remove"></i></a>
+    </div>
+</td>

@@ -195,6 +195,11 @@
                             <i class="fa fa-files-o"></i> <span>Заказы</span>
                         </a>
                     </li>
+                    <li class="treeview {% if location == 'orders' %}active{% endif %}">
+                        <a href="{% url 'order_list' %}">
+                            <i class="fa fa-files-o"></i> <span>Клиенты</span>
+                        </a>
+                    </li>
                 </ul>
             {% endblock %}
         </section>

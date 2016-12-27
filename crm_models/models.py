@@ -54,8 +54,15 @@ class Tag(models.Model):
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
 
+    tag_colors = (
+        ('label-info', 'Голубой'),
+        ('label-danger', 'Красный'),
+        ('label-success', 'зелёный'),
+        ('label-warning', 'Жёлтый'),
+        ('label-primary', 'Синий')
+    )
     name = models.CharField(max_length=255, verbose_name='Наименование')
-    color = models.CharField(max_length=100, verbose_name='Цвет тега')
+    color = models.CharField(max_length=100, verbose_name='Цвет тега', choices=tag_colors)
 
     def __unicode__(self):
         return self.name

@@ -2,17 +2,17 @@
 
 {% load staticfiles %}
 
-{% block title %}Заказы - CRM{% endblock %}
+{% block title %}Клиенты - CRM{% endblock %}
 
 {% block content_header %}
     <section class="content-header">
         <h1>
-            Заказы
+            Клиенты
             <small>список</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="{% url 'index' %}"><i class="fa fa-dashboard"></i> Главная</a></li>
-            <li class="active">Заказы</li>
+            <li class="active">Клиенты</li>
         </ol>
     </section>
 {% endblock %}
@@ -59,39 +59,4 @@
             <!-- /.box -->
         </div>
     </div>
-{% endblock %}
-
-{% block extra_javascripts %}
-    <script>
-        var saveButton = $('.save-order-dashboard');
-
-        var saveDashboardOrder = function (event) {
-            event.preventDefault();
-            $(this).attr('disabled', 'true');
-            var parentNode = $(saveButton).parent().parent().parent();
-            var data = {
-                'url': $(saveButton).attr('href'),
-                'csrf_token': '{{ csrf_token }}',
-                'title': $(parentNode).find('.order-title').find('input[type="text"]').val() + '',
-                'status': $(parentNode).find('.order-status').find('input[type="text"]').val() + ''
-            };
-            {#alert(' url: ' + data['url'] + '\n csrf_token: ' + data['csrf_token'] + '\n title: ' + data['title'] + '\n status:' + data['status']);#}
-            $.ajax({
-                method: 'POST',
-                url: $(saveButton).attr('href'),
-                dataType: 'HTML',
-                data: data,
-                success: function (response) {
-                    if(response != '') {
-                        $(saveButton).removeAttr('disabled');
-                    }
-                },
-                error: function () {
-                    $(saveButton).removeAttr('disabled');
-                }
-            });
-        };
-
-        $(saveButton).on('click', saveDashboardOrder)
-    </script>
 {% endblock %}

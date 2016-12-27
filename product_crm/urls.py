@@ -34,6 +34,8 @@ urlpatterns = [
     url(r'^orders/new$', new_order, name='order_new'),
     url(r'^orders/remove/(?P<order_id>[0-9]+)$', remove_order, name='order_remove'),
     url(r'^orders/view/(?P<order_id>[0-9]+)$', view_order, name='order_view'),
+    url(r'^orders/edit/(?P<order_id>[0-9]+)$', edit_order, name='order_edit'),
+    url(r'^orders/edit/dashboard/(?P<order_id>[0-9]+)$', edit_dashboard_order, name='order_edit_dashboard'),
     url(r'^comments/add', add_comment, name='add_comment'),
     url(r'^comments/all', list_comments, name='all_comments')
 ]

@@ -1,0 +1,82 @@
+{% extends 'view/base.html' %}
+
+{% load staticfiles %}
+
+{% load widget_tweaks %}
+
+{% block title %}Редактировать заказ - CRM{% endblock %}
+
+{% block content_header %}
+    <section class="content-header">
+        <h1>
+            Заказ
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'index' %}"><i class="fa fa-dashboard"></i> Главная</a></li>
+            <li><a href="{% url 'order_list' %}">Заказы</a></li>
+            <li class="active">Новый</li>
+        </ol>
+    </section>
+{% endblock %}
+
+{% block content %}
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">Добавить новый заказ</h3>
+            <p>Поля помеченые (*) обязатыельный к заполнению</p>
+        </div>
+        <!-- /.box-header -->
+        {% if message %}<div class="alert alert-danger">{{ message }}</div>{% endif %}
+        {% if request.method == 'POST' %}{% if order_form.errors %}<div class="alert alert-danger">{{ order_form.errors }}</div>{% endif %}{% endif %}
+        <!-- form start -->
+        <form class="form-horizontal" method="POST" action="{% url 'order_edit' order_id=order.id %}">
+            {% csrf_token %}
+            <div class="box-body">
+                {% for field in order_form %}
+                    {% if field != order_form.final_price %}
+                        {% if field == order_form.done %}
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <div class="checkbox">
+                                        <div>
+                                            {% render_field field class='minimal' %} {{ field.label_tag }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="form-group">
+                                <div class="col-sm-3 control-label">
+                                    {{ field.label_tag }}{% if field.field.required %}*{% endif %}
+                                </div>
+
+                                <div class="col-sm-9">
+                                    {#<input type="email" class="form-control" id="inputEmail3" placeholder="Email">#}
+                                    {% render_field field class='form-control' value=field.value %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                <input type="submit" class="btn btn-info pull-right" value="Сохранить" />
+            </div>
+            <!-- /.box-footer -->
+        </form>
+    </div>
+{% endblock %}
+
+{% block extra_javascripts %}
+    <script src="{% static 'js/icheck.min.js' %}"></script>
+    <script>
+        $(function () {
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+        });
+    </script>
+{% endblock %}

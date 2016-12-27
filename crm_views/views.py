@@ -94,6 +94,8 @@ def new_order(request):
 @login_required
 def remove_order(request, order_id):
     order = Orders.objects.get(id=order_id)
+    order_comments = OrderComment.objects.filter(order_id=order)
+    order_comments.delete()
     order.delete()
     return HttpResponseRedirect(reverse('order_list'))
 
@@ -109,6 +111,42 @@ def view_order(request, order_id):
         'comments_form': comments_form
     }
     return render(request, 'view/showcase/order.html', params)
+
+
+@csrf_exempt
+@login_required
+def edit_order(request, order_id):
+    order = Orders.objects.get(id=order_id)
+    if request.POST:
+        form = CreateOrderForm(request.POST, instance=order)
+        if form.is_valid():
+            nds = 1.5
+            instance = form.instance
+            instance.final_price = float(instance.price) * nds
+            instance.save()
+            return HttpResponseRedirect(reverse('order_list'))
+    else:
+        form = CreateOrderForm(instance=order)
+    params = {
+        'order_form': form,
+        'order': order
+    }
+
+    return render(request, 'view/forms/edit_order.html', params)
+
+
+@csrf_exempt
+@login_required
+def edit_dashboard_order(request, order_id):
+    if request.POST:
+        order = Orders.objects.get(id=order_id)
+        order.title = request.POST.get('title')
+        order.status = request.POST.get('status')
+        order.save()
+        order_template = render_to_response('view/misc/order_dashboard_row.html', {'item': order})
+        return order_template
+    else:
+        return HttpResponse('')
 
 
 @csrf_exempt
@@ -145,3 +183,8 @@ def current_user_profile(request):
         'location': 'profile'
     }
     return render(request, 'view/user/profile.html', params)
+
+
+@login_required
+def list_clients(request):
+    pass
