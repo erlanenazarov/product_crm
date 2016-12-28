@@ -69,10 +69,11 @@ def order_list(request):
 @csrf_exempt
 @login_required
 def new_order(request):
-    form = CreateOrderForm(request.POST)
+    form = OrderForm(request.POST)
     params = {
         'order_form': form,
-        'request': request
+        'request': request,
+        'location': 'orders'
     }
     if request.POST:
         if form.is_valid():
@@ -108,7 +109,8 @@ def view_order(request, order_id):
     params = {
         'order': order,
         'comments': comments,
-        'comments_form': comments_form
+        'comments_form': comments_form,
+        'location': 'orders'
     }
     return render(request, 'view/showcase/order.html', params)
 
@@ -118,7 +120,7 @@ def view_order(request, order_id):
 def edit_order(request, order_id):
     order = Orders.objects.get(id=order_id)
     if request.POST:
-        form = CreateOrderForm(request.POST, instance=order)
+        form = OrderForm(request.POST, instance=order)
         if form.is_valid():
             nds = 1.5
             instance = form.instance
@@ -126,10 +128,11 @@ def edit_order(request, order_id):
             instance.save()
             return HttpResponseRedirect(reverse('order_list'))
     else:
-        form = CreateOrderForm(instance=order)
+        form = OrderForm(instance=order)
     params = {
         'order_form': form,
-        'order': order
+        'order': order,
+        'location': 'orders'
     }
 
     return render(request, 'view/forms/edit_order.html', params)
@@ -187,4 +190,79 @@ def current_user_profile(request):
 
 @login_required
 def list_clients(request):
-    pass
+    paginator = Paginator(Client.objects.all(), 20)
+    clients = paginator.page(request.GET.get('page', 1))
+    params = {
+        'clients': clients,
+        'location': 'clients'
+    }
+    return render(request, 'view/clients.html', params)
+
+
+@csrf_exempt
+@login_required
+def new_client(request):
+    client_form = ClientForm(request.POST)
+    params = {
+        'client_form': client_form,
+        'location': 'clients'
+    }
+
+    if request.POST:
+        if client_form.is_valid():
+            client = client_form.instance
+            client.save()
+            return HttpResponseRedirect(reverse('client_list'))
+
+    return render(request, 'view/forms/add_new_client.html', params)
+
+
+@login_required
+def remove_client(request, client_id):
+    client = Client.objects.get(id=client_id)
+    client.delete()
+    return HttpResponseRedirect(reverse('client_list'))
+
+
+@csrf_exempt
+@login_required
+def edit_client(request, client_id):
+    client = Client.objects.get(id=client_id)
+    if request.POST:
+        form = ClientForm(request.POST, instance=client)
+        if form.is_valid():
+            instance = form.instance
+            instance.save()
+            return HttpResponseRedirect(reverse('client_list'))
+    else:
+        form = ClientForm(instance=client)
+    params = {
+        'client_form': form,
+        'client': client,
+        'location': 'clients'
+    }
+
+    return render(request, 'view/forms/edit_client.html', params)
+
+
+@login_required
+def view_client(request, client_id):
+    client = Client.objects.get(id=client_id)
+    params = {
+        'client': client,
+        'location': 'clients'
+    }
+    return render(request, 'view/showcase/client.html', params)
+
+
+@csrf_exempt
+@login_required
+def edit_dashboard_client(request, client_id):
+    client = Client.objects.get(id=client_id)
+    client.name = request.POST.get('name')
+    client.email = request.POST.get('email')
+    client.phone_number = request.POST.get('phone')
+    client.address = request.POST.get('address')
+    client.save()
+    return JsonResponse(dict(success=True))
+

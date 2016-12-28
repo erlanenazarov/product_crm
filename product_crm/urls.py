@@ -36,8 +36,14 @@ urlpatterns = [
     url(r'^orders/view/(?P<order_id>[0-9]+)$', view_order, name='order_view'),
     url(r'^orders/edit/(?P<order_id>[0-9]+)$', edit_order, name='order_edit'),
     url(r'^orders/edit/dashboard/(?P<order_id>[0-9]+)$', edit_dashboard_order, name='order_edit_dashboard'),
-    url(r'^comments/add', add_comment, name='add_comment'),
-    url(r'^comments/all', list_comments, name='all_comments')
+    url(r'^comments/add$', add_comment, name='add_comment'),
+    url(r'^comments/all$', list_comments, name='all_comments'),
+    url(r'^users/list$', list_clients, name='client_list'),
+    url(r'^users/new$', new_client, name='client_new'),
+    url(r'^users/remove/(?P<client_id>[0-9]+)$', remove_client, name='client_remove'),
+    url(r'^users/edit/(?P<client_id>[0-9]+)$', edit_client, name='client_edit'),
+    url(r'^users/view/(?P<client_id>[0-9]+)$', view_client, name='client_view'),
+    url(r'^users/edit/dashboard/(?P<client_id>[0-9]+)$', edit_dashboard_client, name='client_edit_dashboard'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

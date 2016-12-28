@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 
-{% block title %}Клиенты - CRM{% endblock %}
+{% block title %}Клиенты | CRM{% endblock %}
 
 {% block content_header %}
     <section class="content-header">
@@ -22,34 +22,34 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Заказы</h3>
+                    <h3 class="box-title">Список клиентов</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
                     <table id="example2" class="table table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th>Наименование</th>
-                            <th>Конечная цена $</th>
-                            <th>Статус</th>
-                            <th>Теги</th>
+                            <th>Имя</th>
+                            <th>E-mail</th>
+                            <th>Телефон</th>
+                            <th>Адрес</th>
                             <th>Функции</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {% for item in order_list %}
+                        {% for item in clients %}
                             <tr>
-                                {% include 'view/misc/order_dashboard_row.html' %}
+                                {% include 'view/misc/client_dashboard_row.html' %}
                             </tr>
                         {% endfor %}
                         </tbody>
                         <tfoot>
                         <tr>
-                            <th>Наименование</th>
-                            <th>Конечная цена $</th>
-                            <th>Статус</th>
-                            <th>Теги</th>
-                            <th><a href="{% url 'order_new' %}" class="btn btn-primary">Добавить заказ</a></th>
+                            <th>Имя</th>
+                            <th>E-mail</th>
+                            <th>Телефон</th>
+                            <th>Адрес</th>
+                            <th><a href="{% url 'client_new' %}" class="btn btn-primary">Добавить клиента</a></th>
                         </tr>
                         </tfoot>
                     </table>
@@ -59,4 +59,41 @@
             <!-- /.box -->
         </div>
     </div>
+{% endblock %}
+
+{% block extra_javascripts %}
+    <script>
+        var saveClientButton = $('.save-client-dashboard');
+        $(saveClientButton).on('click', function (event) {
+            event.preventDefault();
+            var that = this;
+            $(this).attr('disabled', 'true');
+            var parent = $(this).parent().parent().parent();
+            var data = {
+                'csrf_token': '{{ csrf_token }}',
+                'name': $(parent).find('.client-name > input').val(),
+                'email': $(parent).find('.client-email > input').val(),
+                'phone': $(parent).find('.client-phone > input').val(),
+                'address': $(parent).find('.client-address > input').val()
+            };
+            //alert('csrf_token: ' + data['csrf_token'] + '\n name: ' + data['name'] + '\n email: ' + data['email'] + '\n phone: ' + data['phone'] + '\n address: ' + data['address']);
+            $.ajax({
+                method: 'POST',
+                dataType: 'JSON',
+                url: $(that).attr('href'),
+                data: data,
+                success: function (response) {
+                    if (response.success) {
+                        alert('Успешно');
+                    } else {
+                        alert('Ошибка!');
+                    }
+                    $(that).removeAttr('disabled');
+                },
+                error: function () {
+                    alert('Ошибка!');
+                }
+            });
+        });
+    </script>
 {% endblock %}

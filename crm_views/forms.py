@@ -8,7 +8,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(max_length=255)
 
 
-class CreateOrderForm(forms.ModelForm):
+class OrderForm(forms.ModelForm):
     class Meta:
         model = Orders
         exclude = ()
@@ -17,4 +17,10 @@ class CreateOrderForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = OrderComment
+        exclude = ()
+
+
+class ClientForm(forms.ModelForm):
+    class Meta:
+        model = Client
         exclude = ()

@@ -1,0 +1,87 @@
+{% extends 'view/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}{{ client.name }} | CRM{% endblock %}
+
+{% block content_header %}
+    <section class="content-header">
+        <h1>
+            Профиль
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'index' %}"><i class="fa fa-dashboard"></i> Главная</a></li>
+            <li><a href="{% url 'client_list' %}">Клиент</a></li>
+            <li class="active">{{ client.name }}</li>
+        </ol>
+    </section>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-3">
+
+            <!-- Profile Image -->
+            <div class="box box-primary">
+                <div class="box-body box-profile">
+                    <img class="profile-user-img img-responsive img-circle" src="{% static 'images/avatar04.png' %}"
+                         alt="User profile picture">
+
+                    <h3 class="profile-username text-center">{{ client.name }}</h3>
+
+                    <p class="text-muted text-center">{{ client.email }}</p>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#settings" data-toggle="tab">Основная информация</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="active tab-pane" id="settings">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Основная информация</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <p class="text-muted"><i class="fa fa-book margin-r-5"></i> Имя</p>
+
+                                <strong>{{ client.name }}</strong>
+
+                                <hr>
+
+                                <p class="text-muted"><i class="fa fa-envelope-o margin-r-5"></i> E-Mail</p>
+
+                                <strong><a href="mailto:{{ client.email }}">{{ client.email }}</a> </strong>
+
+                                <hr>
+
+                                <p class="text-muted"><i class="fa fa-mobile-phone margin-r-5"></i> Телефон</p>
+
+                                <strong>{{ client.phone_number }} </strong>
+
+                                <hr>
+
+                                <p class="text-muted"><i class="fa fa-map-marker margin-r-5"></i> Адрес</p>
+
+                                <strong>{{ client.address }}</strong>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                            <a href="{% url 'client_edit' client_id=client.id %}" class="btn btn-primary"><i class="fa fa-edit"></i> Редактировать</a> <a href="{% url 'client_remove' client_id=client.id %}" class="btn btn-danger"><i class="fa fa-times"></i> Удалить</a>
+                    </div>
+                    <!-- /.tab-pane -->
+                </div>
+                <!-- /.tab-content -->
+            </div>
+            <!-- /.nav-tabs-custom -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+{% endblock %}

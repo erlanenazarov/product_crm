@@ -39,7 +39,7 @@
                     <strong>Основная информация.</strong><br>
                     Статус: {{ order.status }}<br>
                     Ссылка на товар: <a href="{{ order.link_to_product }}" target="_blank">{{ order.title }}</a><br>
-                    Клиент: <a href="#">{{ order.client.name }}</a><br>
+                    Клиент: <a href="{% url 'client_view' client_id=order.client.id %}">{{ order.client.name }}</a><br>
                 </address>
             </div>
             <!-- /.col -->
@@ -90,8 +90,7 @@
                             <form action="{% url 'add_comment' %}" method="post" id="add_comment_form">
                                 {% csrf_token %}
                                 <div class="input-group">
-                                    <input type="text" name="comment" placeholder="Ваш комментарий ..."
-                                           class="form-control" id="comment-field">
+                                    <input type="text" name="comment" placeholder="Ваш комментарий ..." class="form-control" id="comment-field">
                                     <input type="hidden" name="user_id" value="{{ user.id }}"/>
                                     <input type="hidden" name="order_id" value="{{ order.id }}"/>
                                     <span class="input-group-btn"><button type="submit" class="btn btn-primary btn-flat" id="send-chat-button">Отправить</button></span>
@@ -109,7 +108,9 @@
                 <!-- accepted payments column -->
                 <div class="col-xs-6">
                     <p class="lead">Теги:</p>
-                    <div class="label label-info">heeey!</div>
+                    {% for tags in order.tags.all %}
+                        <div class="label {{ tags.color }}">{{ tags.name }}</div>
+                    {% endfor %}
 
                     <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
                         Теги можно добавить в таблице тегов: <a href="#">Теги</a>
