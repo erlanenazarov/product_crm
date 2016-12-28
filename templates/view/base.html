@@ -275,6 +275,13 @@
     <script src="{% static 'js/dashboard.js' %}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{% static 'js/demo.js' %}"></script>
+    <script>
+        var socket = new WebSocket("http://127.0.0.1:11000");
+
+        socket.onmessage = function (event) {
+            alert("Получены данные " + event.data);
+        };
+    </script>
     {% block extra_javascripts %}{% endblock %}
 {% endblock %}
 </body>

@@ -9,6 +9,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login, logout
 from forms import *
 from crm_models.models import *
+from django.contrib.auth.models import *
 
 
 # Create your views here.
@@ -48,8 +49,14 @@ def logout_user(request):
 
 @login_required
 def dashboard(request):
+    orders_count = Orders.objects.all().count()
+    user_count = User.objects.all().count()
+    clients_count = Client.objects.all().count()
     params = {
-        'location': 'dashboard'
+        'location': 'dashboard',
+        'order_count': orders_count,
+        'user_count': user_count,
+        'clients_count': clients_count
     }
     return render(request, 'view/dashboard.html', params)
 
