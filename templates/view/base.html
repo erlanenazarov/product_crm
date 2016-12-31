@@ -66,41 +66,20 @@
                         <li class="dropdown notifications-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-bell-o"></i>
-                                <span class="label label-warning">10</span>
+                                {% if notifications_count > 0 %}<span class="label label-warning">{{ notifications_count }}</span>{% endif %}
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="header">У вас 10 новых уведомлений</li>
+                                <li class="header">{% if notifications_count > 0 %}У вас {{ notifications_count }} новых уведомлений{% else %}У вас нет уведомлений{% endif %}</li>
                                 <li>
                                     <!-- inner menu: contains the actual data -->
                                     <ul class="menu">
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-warning text-yellow"></i> Very long description here
-                                                that
-                                                may not fit into the
-                                                page and may cause design problems
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-users text-red"></i> 5 new members joined
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-user text-red"></i> You changed your username
-                                            </a>
-                                        </li>
+                                        {% for n in notifications %}
+                                            <li>
+                                                <a href="{{ n.url }}">
+                                                    <i class="fa fa-users text-aqua"></i> {{ n.message }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
                                     </ul>
                                 </li>
                                 <li class="footer"><a href="#">Посмотреть все</a></li>
@@ -276,7 +255,7 @@
     <!-- AdminLTE for demo purposes -->
     <script src="{% static 'js/demo.js' %}"></script>
     <script>
-        var socket = new WebSocket("http://127.0.0.1:11000");
+        var socket = new WebSocket("ws://127.0.0.1:11000");
 
         socket.onmessage = function (event) {
             alert("Получены данные " + event.data);

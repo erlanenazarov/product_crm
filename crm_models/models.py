@@ -82,3 +82,19 @@ class OrderComment(models.Model):
 
     def __unicode__(self):
         return self.comment[0:20]
+
+
+class Notification(models.Model):
+    class Meta:
+        db_table = 'notifications'
+        verbose_name_plural = 'Уведомления'
+        verbose_name = 'Уведомление'
+
+    message = models.CharField(max_length=255, verbose_name='Сообщение')
+    user = models.ManyToManyField(BaseUser, verbose_name='Связанные пользователи')
+    url = models.CharField(max_length=255, verbose_name='Ссылка', default='/')
+    is_read = models.BooleanField(default=False, verbose_name='Прочитано?')
+    order = models.ForeignKey('Orders', verbose_name='Привязка к заказу')
+
+    def __unicode__(self):
+        return self.message[0:20]

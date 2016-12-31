@@ -14,6 +14,21 @@ from django.contrib.auth.models import *
 
 # Create your views here.
 
+def generate_view_params(request):
+    notifications = Notification.objects.filter(is_read=False)
+    user_notification = list()
+    for notification in notifications:
+        print notification.user
+        if request.user in notification.user.all():
+            user_notification.append(notification)
+
+    params = {
+        'notifications_count': len(user_notification),
+        'notifications': user_notification
+    }
+    return params
+
+
 @csrf_exempt
 def login_user(request):
     form = LoginForm(request.POST)
@@ -49,15 +64,13 @@ def logout_user(request):
 
 @login_required
 def dashboard(request):
-    orders_count = Orders.objects.all().count()
-    user_count = User.objects.all().count()
-    clients_count = Client.objects.all().count()
     params = {
         'location': 'dashboard',
-        'order_count': orders_count,
-        'user_count': user_count,
-        'clients_count': clients_count
+        'order_count': Orders.objects.all().count(),
+        'user_count': User.objects.all().count(),
+        'clients_count': Client.objects.all().count(),
     }
+    params.update(generate_view_params(request))
     return render(request, 'view/dashboard.html', params)
 
 
@@ -69,6 +82,7 @@ def order_list(request):
         'location': 'orders',
         'order_list': orders
     }
+    params.update(generate_view_params(request))
 
     return render(request, 'view/orders.html', params)
 
@@ -89,12 +103,21 @@ def new_order(request):
                 order = form.instance
                 order.final_price = float(order.price) * nds
                 order.save()
+                notification = Notification()
+                notification.message = u'You have a new order!'
+                notification.url = reverse('order_view', kwargs={'order_id': order.id})
+                notification.save()
+                notification.user.add(request.user)
+                notification.save()
 
                 return HttpResponseRedirect(reverse('order_list'))
-            except:
-                params.update(dict(message='Ошибка при заполнении'))
+            except Exception, e:
+                params.update(dict(message=e))
                 return render(request, 'view/forms/add_new_order.html', params)
+
         print 'form error:' + form.errors
+
+    params.update(generate_view_params(request))
 
     return render(request, 'view/forms/add_new_order.html', params)
 
@@ -102,6 +125,7 @@ def new_order(request):
 @login_required
 def remove_order(request, order_id):
     order = Orders.objects.get(id=order_id)
+    notifications = Notification.objects.filter()
     order_comments = OrderComment.objects.filter(order_id=order)
     order_comments.delete()
     order.delete()
@@ -119,6 +143,7 @@ def view_order(request, order_id):
         'comments_form': comments_form,
         'location': 'orders'
     }
+    params.update(generate_view_params(request))
     return render(request, 'view/showcase/order.html', params)
 
 
@@ -141,6 +166,7 @@ def edit_order(request, order_id):
         'order': order,
         'location': 'orders'
     }
+    params.update(generate_view_params(request))
 
     return render(request, 'view/forms/edit_order.html', params)
 
@@ -192,6 +218,7 @@ def current_user_profile(request):
     params = {
         'location': 'profile'
     }
+    params.update(generate_view_params(request))
     return render(request, 'view/user/profile.html', params)
 
 
@@ -203,6 +230,7 @@ def list_clients(request):
         'clients': clients,
         'location': 'clients'
     }
+    params.update(generate_view_params(request))
     return render(request, 'view/clients.html', params)
 
 
@@ -221,6 +249,7 @@ def new_client(request):
             client.save()
             return HttpResponseRedirect(reverse('client_list'))
 
+    params.update(generate_view_params(request))
     return render(request, 'view/forms/add_new_client.html', params)
 
 
@@ -248,6 +277,7 @@ def edit_client(request, client_id):
         'client': client,
         'location': 'clients'
     }
+    params.update(generate_view_params(request))
 
     return render(request, 'view/forms/edit_client.html', params)
 
@@ -259,6 +289,7 @@ def view_client(request, client_id):
         'client': client,
         'location': 'clients'
     }
+    params.update(generate_view_params(request))
     return render(request, 'view/showcase/client.html', params)
 
 
@@ -272,4 +303,3 @@ def edit_dashboard_client(request, client_id):
     client.address = request.POST.get('address')
     client.save()
     return JsonResponse(dict(success=True))
-
