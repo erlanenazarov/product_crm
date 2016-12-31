@@ -66,10 +66,12 @@
                         <li class="dropdown notifications-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-bell-o"></i>
-                                {% if notifications_count > 0 %}<span class="label label-warning">{{ notifications_count }}</span>{% endif %}
+                                {% if notifications_count > 0 %}
+                                    <span class="label label-warning">{{ notifications_count }}</span>{% endif %}
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="header">{% if notifications_count > 0 %}У вас {{ notifications_count }} новых уведомлений{% else %}У вас нет уведомлений{% endif %}</li>
+                                <li class="header">{% if notifications_count > 0 %}У вас {{ notifications_count }} новых
+                                    уведомлений{% else %}У вас нет уведомлений{% endif %}</li>
                                 <li>
                                     <!-- inner menu: contains the actual data -->
                                     <ul class="menu">
@@ -255,10 +257,15 @@
     <!-- AdminLTE for demo purposes -->
     <script src="{% static 'js/demo.js' %}"></script>
     <script>
-        var socket = new WebSocket("ws://127.0.0.1:11000");
-
+        var socket = new WebSocket("ws://127.0.0.1:8080");
+        socket.onerror = function (error) {
+            alert("Ошибка " + error);
+        };
         socket.onmessage = function (event) {
-            alert("Получены данные " + event.data);
+            console.log("Получены данные " + event.data);
+        };
+        socket.onopen = function () {
+            socket.send('Hello from client!');
         };
     </script>
     {% block extra_javascripts %}{% endblock %}
