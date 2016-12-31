@@ -6,10 +6,11 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import *
 from django.shortcuts import render_to_response
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import *
 from forms import *
 from crm_models.models import *
 from django.contrib.auth.models import *
+from datetime import date
 
 
 # Create your views here.
@@ -303,3 +304,36 @@ def edit_dashboard_client(request, client_id):
     client.address = request.POST.get('address')
     client.save()
     return JsonResponse(dict(success=True))
+
+
+@login_required
+def list_users(request):
+    paginator = Paginator(User.objects.all(), 20)
+    users = paginator.page(request.GET.get('page', 1))
+
+    params = {
+        'location': 'users',
+        'users': users
+    }
+    params.update(generate_view_params(request))
+    return render(request, 'view/users.html', params)
+
+
+@csrf_exempt
+@login_required
+def add_user(request):
+    user_form = UserForm(request.POST)
+    params = {
+        'location': 'users',
+        'user_form': user_form,
+        'current_date': date.today().__format__('y-m-d')
+    }
+    if request.POST:
+        if user_form.is_valid():
+            user = user_form.instance
+            user.save()
+            return HttpResponseRedirect(reverse('user_list'))
+        else:
+            params.update(dict(message='Ошибка', errors=user_form.errors))
+
+    return render(request, 'view/forms/add_new_user.html', params)

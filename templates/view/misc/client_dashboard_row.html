@@ -36,9 +36,9 @@
 </td>
 <td>
     <div class="btn-group">
-        <a href="{% url 'client_view' client_id=item.id %}" class="btn btn-default" title="Заглянуть внутрь"><i class="fa fa-eye"></i></a>
-        <a href="{% url 'client_edit_dashboard' client_id=item.id %}" class="btn btn-default save-client-dashboard" title="Сохранить"><i class="fa fa-save"></i></a>
-        <a href="{% url 'client_edit' client_id=item.id %}" class="btn btn-default" title="Редактировать"><i class="fa fa-edit"></i></a>
-        <a href="{% url 'client_remove' client_id=item.id %}" class="btn btn-danger" title="Удалить"><i class="fa fa-remove"></i></a>
+        <a href="{% url 'client_view' client_id=item.id %}" class="btn btn-default" data-toggle="tooltip" data-original-title="Заглянуть внутрь"><i class="fa fa-eye"></i></a>
+        <a href="{% url 'client_edit_dashboard' client_id=item.id %}" class="btn btn-default save-client-dashboard" data-toggle="tooltip" data-original-title="Сохранить"><i class="fa fa-save"></i></a>
+        <a href="{% url 'client_edit' client_id=item.id %}" class="btn btn-default" data-toggle="tooltip" data-original-title="Редактировать"><i class="fa fa-edit"></i></a>
+        <a href="{% url 'client_remove' client_id=item.id %}" class="btn btn-danger" data-toggle="tooltip" data-original-title="Удалить"><i class="fa fa-remove"></i></a>
     </div>
 </td>

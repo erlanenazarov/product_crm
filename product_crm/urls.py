@@ -16,16 +16,16 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls import url, include
 from django.conf.urls.static import static
-# from django.contrib.auth import logout
+from django.contrib.auth import logout
 
-from django.contrib import admin
+from django.contrib.admin import site
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from crm_views.views import *
 
 urlpatterns = [
     url(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/', site.urls),
     url(r'^login/$', login_user, name='login_user'),
     url(r'^logout/$', logout_user, name='logout_user'),
     url(r'^user/current/profile$', current_user_profile, name='user_profile'),
@@ -44,6 +44,8 @@ urlpatterns = [
     url(r'^users/edit/(?P<client_id>[0-9]+)$', edit_client, name='client_edit'),
     url(r'^users/view/(?P<client_id>[0-9]+)$', view_client, name='client_view'),
     url(r'^users/edit/dashboard/(?P<client_id>[0-9]+)$', edit_dashboard_client, name='client_edit_dashboard'),
+    url(r'^managers/list$', list_users, name='user_list'),
+    url(r'^managers/add$', add_user, name='user_add'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

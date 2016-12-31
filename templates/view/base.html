@@ -182,6 +182,27 @@
                         </a>
                     </li>
                 </ul>
+                <ul class="sidebar-menu">
+                    <li class="header">ОСТАЛЬНОЕ</li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-tablet"></i> <span>Теги</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-commenting-o"></i> <span>Комментарии</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="sidebar-menu">
+                    <li class="header">УПРАВЛЕНИЕ</li>
+                    <li class="treeview {% if location == 'users' %}active{% endif %}">
+                        <a href="{% url 'user_list' %}">
+                            <i class="fa fa-user"></i> <span>Менеджеры</span>
+                        </a>
+                    </li>
+                </ul>
             {% endblock %}
         </section>
         <!-- /.sidebar -->
@@ -259,7 +280,7 @@
     <script>
         var socket = new WebSocket("ws://127.0.0.1:8080");
         socket.onerror = function (error) {
-            alert("Ошибка " + error);
+            console.log("Ошибка " + error.data);
         };
         socket.onmessage = function (event) {
             console.log("Получены данные " + event.data);

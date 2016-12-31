@@ -1,6 +1,7 @@
 # coding=utf-8
 from django import forms
 from crm_models.models import *
+from django.contrib.auth.models import User as BaseUser
 
 
 class LoginForm(forms.Form):
@@ -23,4 +24,10 @@ class CommentForm(forms.ModelForm):
 class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
+        exclude = ()
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = BaseUser
         exclude = ()
