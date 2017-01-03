@@ -10,7 +10,7 @@ from django.contrib.auth import *
 from forms import *
 from crm_models.models import *
 from django.contrib.auth.models import *
-from datetime import date
+from datetime import date, datetime
 
 
 # Create your views here.
@@ -326,14 +326,56 @@ def add_user(request):
     params = {
         'location': 'users',
         'user_form': user_form,
-        'current_date': date.today().__format__('y-m-d')
+        'current_date': datetime.today()
     }
     if request.POST:
         if user_form.is_valid():
             user = user_form.instance
+            user.is_active = True
             user.save()
             return HttpResponseRedirect(reverse('user_list'))
         else:
             params.update(dict(message='Ошибка', errors=user_form.errors))
-
+    params.update(generate_view_params(request))
     return render(request, 'view/forms/add_new_user.html', params)
+
+
+@csrf_exempt
+@login_required
+def edit_user(request, user_id):
+    user = User.objects.get(id=user_id)
+    if request.POST:
+        user_form = UserForm(request.POST, instance=user)
+        if user_form.is_valid():
+            instance = user_form.instance
+            instance.save()
+            return HttpResponseRedirect(reverse('user_list'))
+    else:
+        user_form = UserForm(instance=user)
+
+    params = {
+        'user_form': user_form,
+        'location': 'users',
+        'user': user
+    }
+    params.update(generate_view_params(request))
+    return render(request, 'view/forms/edit_user.html', params)
+
+
+@login_required
+def remove_user(request, user_id):
+    user = User.objects.get(id=user_id)
+    user.delete()
+    return HttpResponseRedirect(reverse('user_list'))
+
+
+@csrf_exempt
+@login_required
+def edit_dashboard_user(request, user_id):
+    user = User.objects.get(id=user_id)
+    user.username = request.POST.get('username')
+    user.email = request.POST.get('email')
+    user.first_name = request.POST.get('first_name')
+    user.last_name = request.POST.get('last_name')
+    user.save()
+    return JsonResponse(dict(success=True))

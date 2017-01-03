@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 
-{% block title %}Заказы - CRM{% endblock %}
+{% block title %}Менеджеры | CRM{% endblock %}
 
 {% block content_header %}
     <section class="content-header">
@@ -59,4 +59,47 @@
             <!-- /.box -->
         </div>
     </div>
+{% endblock %}
+
+{% block extra_javascripts %}
+    <script>
+        var saveUserDashboard = $('.save-user-dashboard');
+        $(saveUserDashboard).on('click', function (event) {
+            event.preventDefault();
+            $(this).attr('disabled', 'true');
+            var parent = $(this).parent().parent().parent();
+            var data = {
+                'csrf_token': '{{ csrf_token }}',
+                'username': $(parent).find('.user-name > input').val(),
+                'email': $(parent).find('.user-email > input').val(),
+                'first_name': $(parent).find('.user-first-name > input').val(),
+                'last_name': $(parent).find('.user-last-name > input').val(),
+                'user_id': $(this).attr('data-user-id')
+            };
+            /*for(var key in data) {
+                if(data.hasOwnProperty(key)) {
+                    console.log(key + ': ' + data[key] + ' \n');
+                }
+            }*/
+            $.ajax({
+                method: 'POST',
+                dataType: 'JSON',
+                data: data,
+                url: $(saveUserDashboard).attr('href'),
+                success: function (response) {
+                    if(response.success) {
+                        $(saveUserDashboard).removeAttr('disabled');
+                        if(data['user_id'] == {{ user.id }}) {
+                            $('#side-bar-user-name').html(data['username']);
+                            $('#user-panel-user-name').html(data['username']);
+                            $('#header-bar-user-panel').html(data['username']);
+                        }
+                    }
+                },
+                error: function () {
+                    $(saveUserDashboard).removeAttr('disabled');
+                }
+            });
+        })
+    </script>
 {% endblock %}

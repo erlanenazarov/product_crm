@@ -32,6 +32,7 @@
             <div class="alert alert-danger">{{ errors }}</div>{% endif %}{% endif %}
         <!-- form start -->
         <form class="form-horizontal" method="POST" action="{% url 'user_add' %}">
+            {% render_field user_form.date_joined type='hidden' value=current_date %}
             {% csrf_token %}
             <div class="box-body">
                 {% for field in user_form %}
@@ -68,7 +69,7 @@
                                 {% render_field field class='form-control' %}
                             </div>
                         </div>
-                    {% elif field == user_form.last_name %}
+                    {% elif field == user_form.email %}
                         <div class="form-group">
                             <div class="col-sm-3 control-label">
                                 {{ field.label_tag }}{% if field.field.required %}*{% endif %}
@@ -79,7 +80,7 @@
                                 {% render_field field class='form-control' %}
                             </div>
                         </div>
-                    {% elif field == user_form.date_joined %}
+                    {% elif field == user_form.last_name %}
                         <div class="form-group">
                             <div class="col-sm-3 control-label">
                                 {{ field.label_tag }}{% if field.field.required %}*{% endif %}
@@ -87,7 +88,7 @@
 
                             <div class="col-sm-9">
                                 {#<input type="email" class="form-control" id="inputEmail3" placeholder="Email">#}
-                                {% render_field field class='form-control' value=current_date %}
+                                {% render_field field class='form-control' %}
                             </div>
                         </div>
                     {% endif %}

@@ -11,7 +11,7 @@
         </h1>
         <ol class="breadcrumb">
             <li><a href="{% url 'index' %}"><i class="fa fa-dashboard"></i> Главная</a></li>
-            <li><a href="#">Пользователь</a></li>
+            <li><a href="{% url 'user_list' %}">Менеджеры</a></li>
             <li class="active">{{ user.username }}</li>
         </ol>
     </section>

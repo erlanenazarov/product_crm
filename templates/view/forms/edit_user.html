@@ -4,7 +4,7 @@
 
 {% load widget_tweaks %}
 
-{% block title %}Редактировать клиента | CRM{% endblock %}
+{% block title %}Редактировать менеджера | CRM{% endblock %}
 
 {% block content_header %}
     <section class="content-header">
@@ -13,7 +13,7 @@
         </h1>
         <ol class="breadcrumb">
             <li><a href="{% url 'index' %}"><i class="fa fa-dashboard"></i> Главная</a></li>
-            <li><a href="{% url 'client_list' %}">Клиенты</a></li>
+            <li><a href="{% url 'user_list' %}">Менеджеры</a></li>
             <li class="active">Новый</li>
         </ol>
     </section>
@@ -22,27 +22,53 @@
 {% block content %}
     <div class="box box-info">
         <div class="box-header with-border">
-            <h3 class="box-title">Добавить нового клиента</h3>
+            <h3 class="box-title">Редактировать менеджера</h3>
             <p>Поля помеченые (*) обязатыельный к заполнению</p>
         </div>
         <!-- /.box-header -->
-        {% if message %}<div class="alert alert-danger">{{ message }}</div>{% endif %}
-        {% if request.method == 'POST' %}{% if client_form.errors %}<div class="alert alert-danger">{{ client_form.errors }}</div>{% endif %}{% endif %}
+        {% if message %}
+            <div class="alert alert-danger">{{ message }}</div>{% endif %}
+        {% if request.method == 'POST' %}{% if user_form.errors %}
+            <div class="alert alert-danger">{{ user_form.errors }}</div>{% endif %}{% endif %}
         <!-- form start -->
-        <form class="form-horizontal" method="POST" action="{% url 'client_edit' client_id=client.id %}">
+        <form class="form-horizontal" method="POST" action="{% url 'user_edit' user_id=user.id %}">
             {% csrf_token %}
             <div class="box-body">
-                {% for field in client_form %}
-                    <div class="form-group">
-                        <div class="col-sm-2 control-label">
-                            {{ field.label_tag }}{% if field.field.required %}*{% endif %}
-                        </div>
+                {% for field in user_form %}
+                    {% if field == user_form.password %}
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                {{ field.label_tag }}{% if field.field.required %}*{% endif %}
+                            </div>
 
-                        <div class="col-sm-10">
-                            {#<input type="email" class="form-control" id="inputEmail3" placeholder="Email">#}
-                            {% render_field field class='form-control' %}
+                            <div class="col-sm-10">
+                                {#<input type="email" class="form-control" id="inputEmail3" placeholder="Email">#}
+                                {% render_field field class='form-control' type='password' %}
+                            </div>
                         </div>
-                    </div>
+                    {% elif field == user_form.email %}
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                {{ field.label_tag }}{% if field.field.required %}*{% endif %}
+                            </div>
+
+                            <div class="col-sm-10">
+                                {#<input type="email" class="form-control" id="inputEmail3" placeholder="Email">#}
+                                {% render_field field class='form-control' type='email' %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                {{ field.label_tag }}{% if field.field.required %}*{% endif %}
+                            </div>
+
+                            <div class="col-sm-10">
+                                {#<input type="email" class="form-control" id="inputEmail3" placeholder="Email">#}
+                                {% render_field field class='form-control' %}
+                            </div>
+                        </div>
+                    {% endif %}
                 {% endfor %}
             </div>
             <!-- /.box-body -->

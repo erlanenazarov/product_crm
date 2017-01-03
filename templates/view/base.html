@@ -91,7 +91,7 @@
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="{% static 'images/avatar04.png' %}" class="user-image" alt="User Image">
-                                <span class="hidden-xs" style="text-transform: uppercase;">{{ user.username }}</span>
+                                <span class="hidden-xs" style="text-transform: uppercase;" id="header-bar-user-panel">{{ user.username }}</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
@@ -99,7 +99,7 @@
                                     <img src="{% static 'images/avatar04.png' %}" class="img-circle" alt="User Image">
 
                                     <p style="text-transform: uppercase;">
-                                        {{ user.username }}
+                                        <span id="user-panel-user-name">{{ user.username }}</span>
                                         <small style="text-transform: capitalize;">Manager</small>
                                     </p>
                                 </li>
@@ -144,7 +144,7 @@
                     <img src="{% static 'images/avatar04.png' %}" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p style="text-transform: uppercase;">{{ user.username }}</p>
+                    <p style="text-transform: uppercase;" id="side-bar-user-name">{{ user.username }}</p>
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
             </div>

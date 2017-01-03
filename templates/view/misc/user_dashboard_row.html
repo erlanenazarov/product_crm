@@ -36,9 +36,8 @@
 </td>
 <td>
     <div class="btn-group">
-        <a href="{% url 'order_view' order_id=item.id %}" class="btn btn-default" data-toggle="tooltip" data-original-title="Заглянуть внутрь"><i class="fa fa-eye"></i></a>
-        <a href="{% url 'order_edit_dashboard' order_id=item.id %}" class="btn btn-default save-order-dashboard" data-toggle="tooltip" data-original-title="Сохранить"><i class="fa fa-save"></i></a>
-        <a href="{% url 'order_edit' order_id=item.id %}" class="btn btn-default" data-toggle="tooltip" data-original-title="Редактировать"><i class="fa fa-edit"></i></a>
-        <a href="{% url 'order_remove' order_id=item.id %}" class="btn btn-danger" data-toggle="tooltip" data-original-title="Удалить"><i class="fa fa-remove"></i></a>
+        <a href="{% url 'user_edit_dashboard' user_id=item.id %}" class="btn btn-default save-user-dashboard" data-toggle="tooltip" data-original-title="Сохранить" data-user-id="{{ item.id }}"><i class="fa fa-save"></i></a>
+        <a href="{% url 'user_edit' user_id=item.id %}" class="btn btn-default" data-toggle="tooltip" data-original-title="Редактировать"><i class="fa fa-edit"></i></a>
+        <a href="{% url 'user_remove' user_id=item.id %}" class="btn btn-danger" data-toggle="tooltip" data-original-title="Удалить"><i class="fa fa-remove"></i></a>
     </div>
 </td>
