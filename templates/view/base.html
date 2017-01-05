@@ -77,7 +77,7 @@
                                     <ul class="menu">
                                         {% for n in notifications %}
                                             <li>
-                                                <a href="{{ n.url }}">
+                                                <a href="{% url 'notification_check' not_id=n.id %}" {% if not n.is_read %}class="active"{% endif %}>
                                                     <i class="fa fa-users text-aqua"></i> {{ n.message }}
                                                 </a>
                                             </li>
@@ -278,17 +278,22 @@
     <!-- AdminLTE for demo purposes -->
     <script src="{% static 'js/demo.js' %}"></script>
     <script>
-        var socket = new WebSocket("ws://127.0.0.1:8080");
-        socket.onerror = function (error) {
-            console.log("Ошибка " + error.data);
-        };
-        socket.onmessage = function (event) {
-            console.log("Получены данные " + event.data);
-        };
-        socket.onopen = function () {
-            socket.send('Hello from client!');
-        };
+        var notUrl = '{% url 'notifications_all' %}';
+        var token = '{{ csrf_token }}';
     </script>
+    <script src="{% static 'js/catchNotifications.js' %}"></script>
+{#    <script>#}
+{#        var socket = new WebSocket("ws://127.0.0.1:8080");#}
+{#        socket.onerror = function (error) {#}
+{#            console.log("Ошибка " + error.data);#}
+{#        };#}
+{#        socket.onmessage = function (event) {#}
+{#            console.log("Получены данные " + event.data);#}
+{#        };#}
+{#        socket.onopen = function () {#}
+{#            socket.send('Hello from client!');#}
+{#        };#}
+{#    </script>#}
     {% block extra_javascripts %}{% endblock %}
 {% endblock %}
 </body>

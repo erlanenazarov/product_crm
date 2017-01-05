@@ -16,18 +16,58 @@ from datetime import date, datetime
 # Create your views here.
 
 def generate_view_params(request):
-    notifications = Notification.objects.filter(is_read=False)
+    params = {
+
+    }
+    params.update(get_user_notifications(request))
+    return params
+
+
+def get_user_notifications(request):
+    notifications = Notification.objects.filter(user__in=[request.user]).order_by('-id')
     user_notification = list()
+    unread_notifications = 0
     for notification in notifications:
-        print notification.user
-        if request.user in notification.user.all():
-            user_notification.append(notification)
+        if notification.is_read is False:
+            unread_notifications += 1
+        user_notification.append(notification)
 
     params = {
-        'notifications_count': len(user_notification),
+        'notifications_count': unread_notifications,
         'notifications': user_notification
     }
     return params
+
+
+@csrf_exempt
+def list_notifications(request):
+    return JsonResponse(get_user_notifications(request))
+
+
+def add_new_notification(message, url, user, order):
+    try:
+        notification = Notification()
+        notification.message = message
+        notification.url = url
+        notification.order = order
+        notification.is_read = False
+        notification.save()
+        if user is not None:
+            for u in user:
+                notification.user.add(u)
+        notification.save()
+        return True
+    except Exception, e:
+        print e
+        return False
+
+
+@login_required
+def view_notification(request, not_id):
+    notification = Notification.objects.get(id=not_id)
+    notification.is_read = True
+    notification.save()
+    return HttpResponseRedirect(notification.url)
 
 
 @csrf_exempt
@@ -104,12 +144,19 @@ def new_order(request):
                 order = form.instance
                 order.final_price = float(order.price) * nds
                 order.save()
-                notification = Notification()
-                notification.message = u'You have a new order!'
-                notification.url = reverse('order_view', kwargs={'order_id': order.id})
-                notification.save()
-                notification.user.add(request.user)
-                notification.save()
+                managers = list(form.cleaned_data['manager'])
+                for manager in managers:
+                    order.manager.add(manager)
+                tags = list(form.cleaned_data['tags'])
+                for tag in tags:
+                    order.tags.add(tag)
+                order.save()
+                add_new_notification(
+                    u'Вы были добавлены в новый заказ!',
+                    reverse('order_view', kwargs={'order_id': order.id}),
+                    managers,
+                    order
+                )
 
                 return HttpResponseRedirect(reverse('order_list'))
             except Exception, e:
@@ -207,8 +254,15 @@ def add_comment(request):
             try:
                 comment = comment_form.instance
                 comment.save()
+                order = comment_form.cleaned_data['order_id']
+                add_new_notification(
+                    u'Добавлен новый комментарий к заказу!',
+                    reverse('order_view', kwargs={'order_id': comment.order_id.id}),
+                    order.manager.all(),
+                    order
+                )
                 return JsonResponse(dict(success=True))
-            except:
+            except Exception, e:
                 return JsonResponse(dict(success=False))
 
     return JsonResponse(dict(success=False))

@@ -46,9 +46,11 @@ urlpatterns = [
     url(r'^users/edit/dashboard/(?P<client_id>[0-9]+)$', edit_dashboard_client, name='client_edit_dashboard'),
     url(r'^managers/list$', list_users, name='user_list'),
     url(r'^managers/add$', add_user, name='user_add'),
-    url(r'^managers/edit/(?P<user_id>[0-9]+)', edit_user, name='user_edit'),
-    url(r'^managers/edit/dashboard/(?P<user_id>[0-9]+)', edit_dashboard_user, name='user_edit_dashboard'),
-    url(r'^managers/remove/(?P<user_id>[0-9]+)', remove_user, name='user_remove'),
+    url(r'^managers/edit/(?P<user_id>[0-9]+)$', edit_user, name='user_edit'),
+    url(r'^managers/edit/dashboard/(?P<user_id>[0-9]+)$', edit_dashboard_user, name='user_edit_dashboard'),
+    url(r'^managers/remove/(?P<user_id>[0-9]+)$', remove_user, name='user_remove'),
+    url(r'^notification/check/(?P<not_id>[0-9]+)', view_notification, name='notification_check'),
+    url(r'^notification/all$', list_notifications, name='notifications_all'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
